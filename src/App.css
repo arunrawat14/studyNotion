@@ -1,0 +1,15 @@
+/* write your css here */
+
+html, body {
+    overflow-x: hidden;
+}
+
+/* Define the gradient for the inner box */
+.homepage_bg {
+    background: url("./assets/Images/bghome.svg");
+}
+
+.codeBlock {
+    position: absolute;
+    background: linear-gradient(118.19deg,#1fa2ff -3.62%,#12d8fa 50.44%,#a6ffcb 104.51%);
+}
