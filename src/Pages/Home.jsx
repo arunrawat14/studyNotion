@@ -126,8 +126,8 @@ export default function Home() {
             </div>
 
             {/* Section 2 */}
-            <div className='bg-pure-greys-5 text-richblack-700'>
-                <div className='homepage_bg h-[333px]  flex items-center ' >
+            <div className='bg-pure-greys-5 text-richblack-700 mt-[100px] '>
+                <div className='homepage_bg h-[500px]  flex items-center  ' >
                     <div className='w-11/12 max-w-maxContent flex item-center justify-center gap-5 mx-auto'>
                         <div className='flex gap-7 text-white '>
                             <CTAbutton active={true} linkto={"/signup"}  >
@@ -170,7 +170,7 @@ export default function Home() {
 
             <div className='flex relative justify-between mx-auto w-11/12 max-w-maxContent p-5 mt-20 mb-72 '>
 
-            <div className=' w-[500px] h-[545px] gap-[98px] bg-richblack-5   ' > </div>
+            <div className=' w-[600px] h-[545px] gap-[98px] bg-richblack-5   ' > </div>
 
                 <div className='w-[616px] h-[545px] absolute left-10 -z-14 top-10 '>
                         <img className=' object-contain ' src={teacher} alt="teacher" />

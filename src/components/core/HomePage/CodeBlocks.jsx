@@ -32,9 +32,9 @@ export default function CodeBlocks({
 
             <div className='w-[45%] relative   '>
 
-                <div className=' '></div>
+                <div className=''></div>
 
-                <div className='w-[100%] flex gap-3 absolute bg-richblack-800  '>
+                <div className='w-[100%] flex gap-3 absolute bg-richblack-800   '>
                     <div className='text-center flex flex-col w-[10%] text-richtblack-400 font-inter  font-bold '>
                         <p>1</p>
                         <p>2</p>
