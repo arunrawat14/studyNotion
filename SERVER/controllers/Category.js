@@ -66,7 +66,7 @@ exports.getAllCategory = async(req,res) => {
 
     }   catch(error) {
         console.log("Something went wrong in getting all the categories")
-        res.stauts(500).json({
+        res.status(500).json({
             sucess: false,
             message: "Something went wrong in getting all the categories"
         })

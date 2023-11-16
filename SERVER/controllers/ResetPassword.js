@@ -10,13 +10,21 @@ exports.resetPasswordToken = async (req, res) => {
         // fetch email from the request
         const {email} = req.body;
 
+        if(!email) {
+            console.log("Email is not given");
+            return res.status(401).json({
+                success: false,
+                message: "Please Enter your email",
+            })
+        }
+
         // check if user exist or not 
         const user = await User.findOne({ email: email });
 
         if (!user) {
             console.log("User is not registered");
             return res.status(401).json({
-                sucess: false,
+                success: false,
                 message: "User is not registered",
             })
         }
@@ -42,20 +50,20 @@ exports.resetPasswordToken = async (req, res) => {
         if (!response) {
             console.log("Reset link send nahi hua");
             return res.status(401).json({
-                sucess: false,
+                success: false,
                 message: "Password reset link is not sent"
             })
         }
 
         res.status(200).json({
-            sucess: true,
+            success: true,
             message: "Password reset link han been sent successfully"
         })
 
     } catch (error) {
         console.log("Something went wrong in sending reset password link to mail", error);
         return res.status(500).json({
-            sucess: false,
+            success: false,
             message: "Something went wrong in sending reset password link to mail, Try Again Later"
         })
     }
@@ -66,32 +74,33 @@ exports.resetPassword = async (req, res) => {
     try {
 
         // fetch data from request
-        const { password, confirmpassword, token } = req.body;
-
+        const { password, confirmPassword, token } = req.body;
         // validation 
-        if (!password || !confirmpassword) {
-            console.log("please provide both the password and confirmpassword");
+        if (!password || !confirmPassword) {
+            console.log("please provide both the password and confirmpassword", password, confirmpassword);
             return res.status(401).json({
-                sucess: false,
+                success: false,
                 message: "Please provide both the password and confirmpassword"
             })
         }
 
-        if (password !== confirmpassword) {
+        if (password !== confirmPassword) {
             console.log("Password and Confirm Password does not match");
             return res.status(401).json({
-                sucess: false,
+                success: false,
                 message: "Password and Confirm Password does not match"
             })
         }
+
+
 
         const userDetails = await User.findOne({ token: token });
 
         if (!userDetails) {
             console.log("Token is invalid");
             return res.status(401).json({
-                sucess: false,
-                message: "Token is not invalid"
+                success: false,
+                message: "Token is invalid"
             })
         }
 
@@ -99,7 +108,7 @@ exports.resetPassword = async (req, res) => {
         if (userDetails.resetTokenExpiration < Date.now()) {
             console.log("Token expires");
             return res.stauts(401).json({
-                sucess: false,
+                success: false,
                 message: "Token is experied , Regenerate the token"
             })
         }
@@ -117,7 +126,7 @@ exports.resetPassword = async (req, res) => {
         if (!updateUserDetails) {
             console.log("Something went worng password is not reset, please try again");
             return res.status(401).json({
-                sucess: false,
+                success: false,
                 message: "Something went worng password is not reset, please try again"
             })
         }
@@ -125,14 +134,14 @@ exports.resetPassword = async (req, res) => {
         const response = await mailSender(userDetails.email, "Password Updated Sucessfully", passwordUpdated(userDetails.email, userDetails.firstName) )
 
         res.status(200).json({
-            sucess: true,
+            success: true,
             message: "Password updated successfully",
         })
 
     } catch (error) {
         console.log("Password is not updated try again", error.message);
         return res.status(500).json({
-            sucess: false,
+            success: false,
             message: "Something went worng password is not updated, please try again",
         })
     }

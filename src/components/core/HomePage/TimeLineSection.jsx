@@ -37,7 +37,7 @@ export default function TimeLineSection() {
                         timeline.map((element, index) => {
                             return (
                                 <div className='flex flex-row gap-6 ' key={index}>
-                                    <div className='w-[50px] h-[50px] bg-white flex items-center'>
+                                    <div className='w-[50px] h-[50px] bg-white flex justify-center items-center'>
                                         <img src={element.logo} alt='img' />
                                     </div>
 
@@ -55,7 +55,7 @@ export default function TimeLineSection() {
                 <div className='w-[55%] shadow-blue-200 shadow-lg relative flex justify-end '>
                 <img src={timeLineImage} alt="ar" />
 
-                    <div className='absolute -bottom-11 right-8 bg-caribbeangreen-700 flex items-center justify-center flex-row gap-[52px] uppercase w-[460px] h-[128px] '>
+                    <div className='absolute -bottom-11 left-[95px] bg-caribbeangreen-700 flex items-center justify-center flex-row gap-[52px] uppercase w-[460px] h-[128px] '>
                         <div className='flex w-[161px] gap-[24px] h-[44px]  text-caribbeangreen-200'>
                             <p className='w-[42px] h-[44px] text-white text-[36px] font-bold '>10</p>
                             <p className='w-[95px] h-[44px] text-[14px]'>YEARS EXPERIENCES </p>

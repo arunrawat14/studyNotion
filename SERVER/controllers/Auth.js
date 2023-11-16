@@ -47,6 +47,7 @@ exports.sendOTP = async (req, res) => {
 
             result = await OTP.findOne({ otp: otp });
         }
+        
 
         // creating payload for storing the otp in db
 
@@ -57,7 +58,7 @@ exports.sendOTP = async (req, res) => {
         console.log(otpbody);
 
         res.status(200).json({
-            sucess: true,
+            success: true,
             message: 'OTP sent sucessfully'
         })
     }
@@ -87,11 +88,12 @@ exports.signUp = async (req, res) => {
             otp
         } = req.body;
 
+
         // all input feild validations are required
         if (!firstName || !lastName || !email || !password || !confirmPassword || !otp) {
             console.log("all feilds are not filled ");
-            return res.status(401).json({
-                sucess: false,
+            return res.status(400).json({
+                success: false,
                 message: "All feilds are required"
             })
         }
@@ -99,7 +101,7 @@ exports.signUp = async (req, res) => {
         if (!validator.isEmail(email)) {
             console.log("Email address is not valid");
             return res.status(400).json({
-                sucess: false,
+                success: false,
                 message: "Email address is not valid"
             })
         }
@@ -110,7 +112,7 @@ exports.signUp = async (req, res) => {
         if (existingUser) {
             console.log("User already exists");
             return res.status(400).json({
-                sucess: false,
+                success: false,
                 message: "User already exists"
             })
         }
@@ -120,7 +122,7 @@ exports.signUp = async (req, res) => {
         if (password !== confirmPassword) {
             console.log("password and confirmpassword does not match");
             return res.status(401).json({
-                sucess: false,
+                success: false,
                 message: "password and confirmpassword does not match"
             })
         }
@@ -135,14 +137,14 @@ exports.signUp = async (req, res) => {
             // otp not found 
             console.log("otp not found ");
             return res.status(400).json({
-                sucess: false,
+                success: false,
                 message: "otp not found"
             })
         } else if (otp !== recentotp.otp) {
             // otp does not match
             console.log("otp does not match");
             return res.status(401).json({
-                sucess: false,
+                success: false,
                 message: "otp does not match"
             })
         }
@@ -178,7 +180,7 @@ exports.signUp = async (req, res) => {
 
         console.log("user registration successful")
         return res.status(200).json({
-            sucess: true,
+            success: true,
             message: "user registered sucessfully",
             user,
         })
@@ -186,7 +188,7 @@ exports.signUp = async (req, res) => {
     catch (error) {
         console.log("Error in SIgnup ", error);
         return res.status(500).json({
-            sucess: false,
+            success: false,
             message: "Something went wrong please register again",
         })
     }
@@ -204,9 +206,10 @@ exports.login = async (req, res) => {
 
         if (!email || !password) {
             console.log("all feilds are required");
-            return res.status(401).json({
-                sucess: false,
-                message: "All feilds are required"
+            return res.status(400).json({
+                success: false,
+                message: "All feilds are required",
+                error: "Please fill all the feilds "
             })
         }
 
@@ -217,8 +220,10 @@ exports.login = async (req, res) => {
         if (!user) {
             console.log("user not registered");
             return res.status(401).json({
-                sucess: false,
-                message: "User Not Registered"
+                success: false,
+                message: `User Not Registered`,
+                error: "User Not Registered"
+
             })
         }
 
@@ -252,7 +257,7 @@ exports.login = async (req, res) => {
             }
 
             res.cookie('token', token, option).status(200).json({
-                sucess: true,
+                success: true,
                 user,
                 token,
                 message: "user log in sucessfully"
@@ -261,9 +266,9 @@ exports.login = async (req, res) => {
         }
         else {
             console.log("password does not match");
-            return res.status(401).json({
-                sucess: false,
-                message: "Password does not match"
+            return res.status(400).json({
+                success: false,
+                message: "Password does not match",
             })
         }
     }
@@ -271,7 +276,8 @@ exports.login = async (req, res) => {
         console.log("Login not sucessfull", error);
         return res.status(500).json({
             sucess: false,
-            message: "something went wrong login again"
+            message: "something went wrong login again",
+            error: "Something went wrong login again"
         })
     }
 }

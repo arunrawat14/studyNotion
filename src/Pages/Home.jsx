@@ -49,9 +49,9 @@ export default function Home() {
                     </CTAbutton>
                 </div>
 
-                <div className='mx-40 my-10 shadow-lg shadow-blue-200'>
+                <div className='mx-40 my-10 shadow-2xl boxshadow  shadow-blue-200 '>
 
-                    <video muted loop autoPlay>
+                    <video muted loop autoPlay className=''  >
                         <source src={Banner} type='video/mp4' />
                     </video>
 
