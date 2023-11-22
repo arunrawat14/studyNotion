@@ -131,13 +131,20 @@ export function login(email, password, navigate) {
 // yha pe  logout wala bhi likhna hai 
 export function logout(navigate) {
   return (dispatch) => {
-    dispatch(setToken(null))
-    dispatch(setUser(null))
-    dispatch(resetCart())
-    localStorage.removeItem("token")
-    localStorage.removeItem("user")
-    toast.success("Logged Out")
-    navigate("/")
+
+    try {
+      dispatch(setToken(null))
+      dispatch(setUser(null))
+      dispatch(resetCart(null))
+      localStorage.removeItem("token")
+      localStorage.removeItem("user")
+      toast.success("Logged Out")
+      navigate("/")
+    } catch(error) {
+      console.log("ERROR IN LOGOUT.......", error.message)
+      toast.error(error.message)
+    }
+   
   }
 }
 
