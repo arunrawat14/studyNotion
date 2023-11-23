@@ -20,7 +20,7 @@ exports.capturePayment = async (req, res) => {
         if (!courseId) {
             console.log("CourseId Not found");
             return res.status(404).json({
-                sucess: false,
+                success: false,
                 message: "CourseId Not Found in the request Body",
             })
         }
@@ -32,7 +32,7 @@ exports.capturePayment = async (req, res) => {
         if (!course) {
             console.log("Course not found");
             return res.status(404).json({
-                sucess: false,
+                success: false,
                 message: "Course Not Found"
             })
         }
@@ -43,7 +43,7 @@ exports.capturePayment = async (req, res) => {
         if (course.studentEnroll.includes(userId)) {
             console.log("User Already enrolled")
             return res.status(401).json({
-                sucess: false,
+                success: false,
                 message: "User already enrolled"
             })
         }
@@ -167,7 +167,7 @@ exports.verifyPaymentSignature = async (req, res) => {
             )
 
             res.status(200).json({
-                sucess: true,
+                success: true,
                 message: "Signature Verified and COurse Added"
             })
 
@@ -175,7 +175,7 @@ exports.verifyPaymentSignature = async (req, res) => {
         } else {
             console.log("Payment is not authorized")
             return res.status(401).json({
-                sucess: false,
+                success: false,
                 message: "Payment is not authorized",
             })
         }
@@ -183,7 +183,7 @@ exports.verifyPaymentSignature = async (req, res) => {
     } catch (error) {
         console.log("Error in Payment Authorization", error);
         return res.status(500).json({
-            sucess: false,
+            success: false,
             message: "Something went wrong with  Payment Authorization, Try Again Later"
         })
 

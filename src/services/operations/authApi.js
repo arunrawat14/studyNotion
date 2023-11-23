@@ -5,6 +5,7 @@ import {resetCart} from '../../sclices/cartSlice'
 import { apiConnector } from '../apiconnecter'
 import { endpoints } from "../api";
 
+
 // destructureing the endpints for the authentication 
 
 const {
@@ -118,6 +119,7 @@ export function login(email, password, navigate) {
 
       localStorage.setItem("token", JSON.stringify(response.data.token))
       localStorage.setItem("user", JSON.stringify(response.data.user))
+      
       navigate("/dashboard/my-profile")
     } catch (error) {
       console.log("LOGIN API ERROR............", error)
@@ -131,7 +133,6 @@ export function login(email, password, navigate) {
 // yha pe  logout wala bhi likhna hai 
 export function logout(navigate) {
   return (dispatch) => {
-
     try {
       dispatch(setToken(null))
       dispatch(setUser(null))

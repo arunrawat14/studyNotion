@@ -112,7 +112,7 @@ export default function Navbar() {
                     {
                         user && user?.accountType !== "Instructor" && (
                             <Link to="/dashboard/cart" className='relative'>
-                                <AiOutlineShoppingCart />
+                                <AiOutlineShoppingCart className='w-[24px] h-[24px] rounded-full text-richblack-300' />
                                 {
                                     totalItems > 0 && (
                                         <span>
