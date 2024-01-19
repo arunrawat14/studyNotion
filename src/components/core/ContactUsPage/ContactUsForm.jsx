@@ -3,6 +3,8 @@ import { useEffect } from 'react'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import codes from '../../../data/countrycode.json'
+import { apiConnector } from "../../../services/apiconnecter"
+import { contactusEndpoint } from "../../../services/api"
 
 const ContactUsForm = () => {
 
@@ -17,10 +19,13 @@ const ContactUsForm = () => {
     const submitContactForm = async (data) => {
         try {
             setLoading(true);
-            console.log(data);
-            //const response  = await apiConnector("POST", )
-            const response = {status: "ok"}
-            console.log(response);
+            console.log("data for contact is::>>", data);
+            const res = await apiConnector(
+                "POST",
+                contactusEndpoint.CONTACT_US_API,
+                data
+              )
+               console.log("Email Res - ", res)
             setLoading(false);
         } catch(error) {
             console.log("SUBMITFORM CONTACT US RESPONSE... ", error.message )

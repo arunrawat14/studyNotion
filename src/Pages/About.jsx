@@ -9,6 +9,7 @@ import Stats from '../components/core/AboutPage/Stats'
 import LearningGrid from '../components/core/AboutPage/LearningGrid'
 import ContactFormSection from '../components/core/AboutPage/ContactFormSection'
 import Footer from '../components/common/Footer'
+import ReviewSlider from '../components/common/ReviewSlider'
 
 const About = () => {
     return (
@@ -88,8 +89,15 @@ const About = () => {
             {/* section 6 */}
             <ContactFormSection />
 
-            <div className='mt-[220px] text-[36px] font-semibold flex justify-center text-richblack-5'>
-                Reviews From Other Learners
+           {/* Reviws from Other Learner */}
+            
+           <div className='flex-col relative justify-between mx-auto w-11/12 max-w-maxContent p-5 mt-16 mb-72 '>
+            <h1 className="text-center text-4xl  text-richblack-5 font-semibold mt-8">
+                Reviews from other learners
+            </h1>
+                <div className=' w-full  flex justify-center items-center    ' > 
+                        <ReviewSlider />
+            </div>
             </div>
 
             {/* Review section */}

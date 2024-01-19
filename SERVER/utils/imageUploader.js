@@ -6,6 +6,7 @@ exports.uploadImageToCloudinary = async(file, folder, height, quality ) => {
         console.log("yha tak ponch gya hai")
         let options = {folder};
         
+        
         if(height) {
             options.height = height;
         }
@@ -13,9 +14,10 @@ exports.uploadImageToCloudinary = async(file, folder, height, quality ) => {
         if(quality) {
             options.quality = quality;
         }
-
+        
+        
         options.resource_type = "auto";
-
+        console.log("yha tak b sb theek hai .........")
         return await cloudinary.uploader.upload(file.tempFilePath, options);
 
     } catch(error) {

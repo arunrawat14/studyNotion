@@ -1,98 +1,97 @@
 const Profile = require('../models/Profile')
 const User = require('../models/user')
+const Course = require('../models/Course')
 const {uploadImageToCloudinary } = require('../utils/imageUploader')
+const CourseProgress = require("../models/CourseProgress")
+const { convertSecondsToDuration } = require("../utils/secToDuration")
+const  mongoose = require('mongoose')
 // update the existing profile
 exports.updateProfile = async( req, res) => {
-    try {
+  try {
+    const {
+      firstName = "",
+      lastName = "",
+      dateOfBirth = "",
+      about = "",
+      contactNumber = "",
+      gender = "",
+    } = req.body
+    const id = req.user.id
 
-        // fetch data 
-        const {gender, dateOfBirth="", about="", contactNumber} =  req.body;
-        // fetch id
-        const id = req.user.id;
+    // Find the profile by id
+    const userDetails = await User.findById(id)
+    const profile = await Profile.findById(userDetails.additionalDetails)
 
-        // validation 
-        if(!gender || !id || !contactNumber)  {
-            console.log("All fields are required for updating profile");
-            return res.status(401).json({
-                sucess: false,
-                message: "All feilds are required for updating profile"
-            })
-        }
+    const user = await User.findByIdAndUpdate(id, {
+      firstName,
+      lastName,
+    })
+    await user.save()
 
-        // get profile id by user id 
-        const userDetails =  await User.findById(id);
+    // Update the profile fields
+    profile.dateOfBirth = dateOfBirth
+    profile.about = about
+    profile.contactNumber = contactNumber
+    profile.gender = gender
 
-        // fetch user profile id from additional details
-        const profileId = userDetails.additionalDetails;
+    // Save the updated profile
+    await profile.save()
 
-        // update profile 
+    // Find the updated user details
+    const updatedUserDetails = await User.findById(id)
+      .populate("additionalDetails")
+      .exec()
 
-        const updatedProfile = await Profile.findByIdAndUpdate(profileId, {
-            gender: gender,
-            dateOfBirth: dateOfBirth,
-            about: about,
-            contactNumber: contactNumber,
-        }, {new: true});
-
-        console.log(updatedProfile);
-
-        return res.status(200).json({
-            sucess: true,
-            message : "Profile updated successfully",
-            updatedProfile,
-        })
-
-    } catch(error) {
-        console.log("Error in updating profile: " , error);
-        return res.status(500).json({
-            sucess: false,
-            message: "Something went wrong in updating profile, try again later"
-        })
-    }
+    return res.json({
+      success: true,
+      message: "Profile updated successfully",
+      updatedUserDetails,
+    })
+  } catch (error) {
+    console.log(error)
+    return res.status(500).json({
+      success: false,
+      error: error.message,
+    })
+  }
 }
 
 
 // delete user 
 exports.deleteUser = async( req, res) => {
-    try {
-
-        // fetch id
-        const id = req.user.id;
-
-        // validation 
-        if(!id)  {
-            console.log("ID is required for Deleting profile");
-            return res.status(401).json({
-                sucess: false,
-                message: "Id is required for Deleting profile"
-            })
-        }
-
-        // get profile id by user id 
-        const userDetails =  await User.findById(id);
-
-        // fetch user profile id from additional details
-        const profileId = userDetails.additionalDetails;
-
-       // delete profile id first 
-        await Profile.findByIdAndDelete(profileId);
-
-        //TOOD: HW unenroll user form all enrolled courses
-
-        
-
-        // delete user 
-        await User.findByIdAndDelete(userDetails.id);
-
-        res.status(200).json({
-            sucess: true,
-            message : "Profile deleted successfully"
-        })
-
+  try {
+    const id = req.user.id
+    console.log(id)
+    const user = await User.findById({ _id: id })
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      })
+    }
+    // Delete Assosiated Profile with the User
+    await Profile.findByIdAndDelete({
+      _id: new mongoose.Types.ObjectId(user.additionalDetails),
+    })
+    for (const courseId of user.courses) {
+      await Course.findByIdAndUpdate(
+        courseId,
+        { $pull: { studentsEnroled: id } },
+        { new: true }
+      )
+    }
+    // Now Delete User
+    await User.findByIdAndDelete({ _id: id })
+    await CourseProgress.deleteMany({ userId: id })
+    
+    res.status(200).json({
+      success: true,
+      message: "User and Profile deleted successfully",
+    })
     } catch(error) {
         console.log("Error in deleting profile: " + error.message);
         return res.status(500).json({
-            sucess: false,
+            success: false,
             message: "Something went wrong in deleting profile, try again later",
             error: error.message
         })
@@ -113,7 +112,7 @@ exports.getAllUserDetails = async(req,res) => {
         console.log("User details: " , userDetails)
 
         res.status(200).json({
-            sucess: true,
+            success: true,
             message: "User Data fetched sucessfully",
             data: userDetails,
         });
@@ -121,7 +120,7 @@ exports.getAllUserDetails = async(req,res) => {
     } catch(error) {
         console.log("Error in getting user details: " + error);
         return res.status(500).json({
-            sucess: false,
+            success: false,
             message: "Something went wrong in getting user details, try again later"
         })
     }
@@ -148,7 +147,7 @@ exports.updateProfilePicture = async (req,res) => {
 
         console.log("Profile updated")
         res.status(200).json({
-            sucess: true,
+            success: true,
             message: "Profile updated successfully",
             data: updateProfile
         })
@@ -156,7 +155,7 @@ exports.updateProfilePicture = async (req,res) => {
     } catch(error) {
         console.log("Error in getting user details: " , error);
         return res.status(500).json({
-            sucess: false,
+            success: false,
             message: "Something went wrong in getting user details, try again later"
         })
     }
@@ -168,11 +167,53 @@ exports.updateProfilePicture = async (req,res) => {
 exports.getEnrolledCourses = async (req, res) => {
     try {
       const userId = req.user.id
-      const userDetails = await User.findOne({
+      console.log("yee id mil gyi" + userId)
+      let userDetails = await User.findOne({
         _id: userId,
       })
-        .populate("courses")
-        .exec()
+      .populate({
+        path: "courses",
+        populate: {
+          path: "courseContent",
+          populate: {
+            path: "subSections",
+          },
+        },
+      })
+      .exec()
+
+    userDetails = userDetails.toObject()
+    var SubsectionLength = 0
+    for (var i = 0; i < userDetails.courses.length; i++) {
+      let totalDurationInSeconds = 0
+      SubsectionLength = 0
+      for (var j = 0; j < userDetails.courses[i].courseContent.length; j++) {
+        totalDurationInSeconds += userDetails.courses[i].courseContent[
+          j
+        ].subSections.reduce((acc, curr) => acc + parseInt(curr.timeDuration), 0)
+        userDetails.courses[i].totalDuration = convertSecondsToDuration(
+          totalDurationInSeconds
+        )
+        SubsectionLength +=
+          userDetails.courses[i].courseContent[j].subSections.length
+      }
+      let courseProgressCount = await CourseProgress.findOne({
+        courseID: userDetails.courses[i]._id,
+        userId: userId,
+      })
+      courseProgressCount = courseProgressCount?.completedVideos.length
+      if (SubsectionLength === 0) {
+        userDetails.courses[i].progressPercentage = 100
+      } else {
+        // To make it up to 2 decimal point
+        const multiplier = Math.pow(10, 2)
+        userDetails.courses[i].progressPercentage =
+          Math.round(
+            (courseProgressCount / SubsectionLength) * 100 * multiplier
+          ) / multiplier
+      }
+    }
+
       if (!userDetails) {
         return res.status(400).json({
           success: false,
@@ -190,3 +231,48 @@ exports.getEnrolledCourses = async (req, res) => {
       })
     }
 };
+
+// get instructor dashboard
+exports.instructorDashboard = async (req, res) => {
+    console.log('welcome to instructor dashboard')
+    try {
+        const courseDetails = await Course.find({ instructor: req.user.id })
+
+        console.log("yha tak aa gye instructore dadboard ke andr ")
+        console.log("req me gya hai ki nhi check karo", req.user)
+        console.log("ye course detail hai backend me " + courseDetails);
+        const courseData = courseDetails.map((course) => {
+            const totalStudentsEnrolled = course.studentEnroll.length
+            const totalAmountGenerated = totalStudentsEnrolled * course.price
+            console.log("yha tak sb theek chala get instructor data tak")
+            // Create a new object with the additional fields
+            const courseDataWithStats = {
+                _id: course._id,
+                courseName: course.courseName,
+                courseDescription: course.courseDescription,
+                // Include other course properties as needed
+                totalStudentsEnrolled,
+                totalAmountGenerated,
+            }
+
+            return courseDataWithStats
+        })
+
+        if (courseData.length > 0) {
+            res.status(200).json({ 
+                success: true,
+                courses: courseData })
+        } else {
+            // Send a response indicating that no courses were found
+            res.status(404).json({ message: "No courses found for this instructor" })
+        }
+    } catch (error) {
+        console.error(error)
+        res.status(500).json({ 
+            sucess: false,
+            error: error.message,
+            message: "Server Error" })
+    }
+}
+
+  

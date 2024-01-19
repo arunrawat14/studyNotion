@@ -14,23 +14,28 @@ exports.createRating = async(req,res) => {
         
         // check if user enrolled or not in a course if enrolled then only he/she can review
         
-        const uid = new mongoose.Types.ObjectId(userId);
-
-        if(!Course.studentEnroll.includes(uid)) {
-            console.log("User is not enrolled in this course he cant rate and review this course");
-            return res.status(401).json({
-                sucess: false,
-                messgae: "User cannot rate and review this course because he/she is not enrolled in this course",
+        const courseDetails = await Course.findOne({
+            _id: courseId,
+            studentEnroll: { $elemMatch: { $eq: userId } },
+          })
+      
+          if (!courseDetails) {
+            return res.status(404).json({
+              success: false,
+              message: "Student is not enrolled in this course",
             })
-        }
+          }
 
         // check user alredy reviewd or not
-        const ratingReview = await RatingAndReviews.findOne({user: userId}, {course: courseId});
+        const ratingReview = await RatingAndReviews.findOne({
+            user: userId,
+            course: courseId
+        });
 
         if(ratingReview) {
             console.log("User Already Reviewed this course");
             return res.status(403).json({
-                sucess: false,
+                success: false,
                 message: "User already reviewed this course",
             })
         }
@@ -54,20 +59,19 @@ exports.createRating = async(req,res) => {
 
             },
             {new: true}
-          
         )
         
         // kaam done done hogya bhai log  send the response 
-        res.statu(200).json({
-            sucess: false,
+        res.status(200).json({
+            success: true,
             message: "Review id added successfully",
-            updatedCorseRating,
+            ratingResult,
         })
 
     } catch (error) {
         console.log("Error in create Rating", error);
         return res.status(500).json({
-            sucess: false,
+            success: false,
             message: "Something went wrong in creating the rating tr again later",
         })
     }
@@ -132,15 +136,16 @@ exports.getAllRating = async (req,res) => {
                                  .sort(({rating: "desc"}))
                                  .populate({
                                     path:"user",
-                                    select: "firseName lastName email igame"
+                                    select: "firseName lastName email image"
                                  })
                                  .populate({
                                     path: "course",
                                     select: "courseName"
                                  })
 
+            console.log("all ratings are:::>>>", allRatings)
         res.status(200).json({
-            sucess: true,
+            success: true,
             message: "All reviews are fetched successfully",
             data: allRatings
         })
@@ -149,7 +154,8 @@ exports.getAllRating = async (req,res) => {
         console.log("Error in getAllRating", error);
         return res.status(500).json({
             sucess: false,
-            messgae: "Something went wrong in getting all ratings"
+            messgae: "Something went wrong in getting all ratings",
+            error: error.message
         })
     }
 }

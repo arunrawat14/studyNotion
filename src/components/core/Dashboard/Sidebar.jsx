@@ -58,7 +58,7 @@ const Sidebar = () => {
 
             {
                 confirmationModal && (
-                    <div className=' absolute top-0 w-[100vw] min-h-[calc(100vh-3.5rem)]  backdrop-blur-sm  ' >
+                    <div className=' z-[10000] absolute top-0 w-[100vw] min-h-[calc(100vh-3.5rem)]  backdrop-blur-sm  ' >
                          <ConfirmationModal confirmationModal={confirmationModal} />
                     </div>
 

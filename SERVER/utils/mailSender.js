@@ -29,11 +29,11 @@ const mailSender = async (email, title, body) => {
             return info;
     }
     catch (err) {
-        console.log("error in sending mail in mailsender function ", error);
-        res.status(500).json({
-            sucess: false,
-            message: "error sending mail in mailsender function"
-        })
+        console.log("error in sending mail in mailsender function ", err);
+        // res.status(500).json({
+        //     sucess: false,
+        //     message: "error sending mail in mailsender function"
+        // })
     }
 } 
 

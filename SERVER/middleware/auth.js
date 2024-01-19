@@ -6,9 +6,14 @@ require("dotenv").config();
 exports.auth = async(req,res,next) => {
     try {
 
-        // fetch tken from the request 
-        const token  = req.cookies.token || req.header("Authorization").replace("Bearer", "") || req.body.token;
-
+        // fetch token from the request 
+        console.log("yha middelware me check hone se pehle")
+        const token =
+  req.cookies.token ||
+  req.body.token ||
+  (req.headers.authorization && req.headers.authorization.replace(/^Bearer\s*/i, "")) ||
+  req.token;
+        console.log("yha middelware me check hone token pahuncha", token)
         // validate the token 
         if(!token) {
             console.log("Token didn't recived");
@@ -16,9 +21,9 @@ exports.auth = async(req,res,next) => {
                 sucess: false,
                 message: "Token is missing"
             })
-        }
+        } else {
 
-        // decode token that is is authorized of not 
+             // decode token that is is authorized of not 
 
         const decode = jwt.verify(token, process.env.JWT_SECRET);
 
@@ -35,8 +40,11 @@ exports.auth = async(req,res,next) => {
 
         next();
 
+        }
+
+
     }   catch(error) {
-            console.log("Something went wrong in authentication", error.message);
+            console.log("Something went wrong in authentication", error);
             res.status(500).json({
                 sucess: false,
                 message: "Something went wrong in authentication"
@@ -78,6 +86,7 @@ exports.isInstructor = async(req,res,next) => {
                 message: "This is protected route is protected for Instructor only"
             })
         }
+        console.log("middleware check ho gya ab aage jaa rha hai instructor dashboard me ")
         next();
     }   catch(error) {
             console.log("Something went wrong in instructor authentication", error);

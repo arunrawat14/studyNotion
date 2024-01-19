@@ -10,7 +10,7 @@ import LearningLanguageSection from '../components/core/HomePage/LearningLanguag
 import teacher from '../assets/Images/Instructor.png'
 import Footer from '../components/common/Footer'
 import ExploreMore from '../components/core/HomePage/ExploreMore'
-
+import ReviewSlider from '../components/common/ReviewSlider'
 
 export default function Home() {
     return (
@@ -118,9 +118,9 @@ export default function Home() {
                         codeColour={"text-white"}
                     >
                     </CodeBlocks>
-                </div>  
+                </div>
 
-                <ExploreMore/> 
+                <ExploreMore />
 
 
             </div>
@@ -144,36 +144,36 @@ export default function Home() {
                         </div>
                     </div>
                 </div>
-                
-                <div className='mx-auto w-11/12 max-w-maxComtent flex flex-col items-center justify-between gap-7 mt-20 '>
-                        <div className='flex gap-20 mb-10 p-2 justify-between max-w-maxContent  '>
-                            <div className='item-center text-4xl  '>
-                                Get the skills you need for a
-                                <HighlightText text={"job that is in demand."} />
-                            </div>
 
-                            <div className='flex flex-col gap-7 text-richblack-600 '>
-                                <p>The modern StudyNotion is the dictates its own terms. Today, to be a competitive specialist requires more than professional skills.</p>
-                                <div className='w-[20%]'>
-                                    <CTAbutton active={true} linkto={"/signup"} >
-                                        Learn More
-                                    </CTAbutton>
-                                </div>
-                            </div>
+                <div className='mx-auto w-11/12 max-w-maxComtent flex flex-col items-center justify-between gap-7 mt-20 '>
+                    <div className='flex gap-20 mb-10 p-2 justify-between max-w-maxContent  '>
+                        <div className='item-center text-4xl  '>
+                            Get the skills you need for a
+                            <HighlightText text={"job that is in demand."} />
                         </div>
 
-                        <TimeLineSection/>
-                <LearningLanguageSection/>
+                        <div className='flex flex-col gap-7 text-richblack-600 '>
+                            <p>The modern StudyNotion is the dictates its own terms. Today, to be a competitive specialist requires more than professional skills.</p>
+                            <div className='w-[20%]'>
+                                <CTAbutton active={true} linkto={"/signup"} >
+                                    Learn More
+                                </CTAbutton>
+                            </div>
+                        </div>
+                    </div>
+
+                    <TimeLineSection />
+                    <LearningLanguageSection />
                 </div>
             </div>
             {/* Section 3 */}
 
             <div className='flex relative justify-between mx-auto w-11/12 max-w-maxContent p-5 mt-20 mb-72 '>
 
-            <div className=' w-[600px] h-[545px] gap-[98px] bg-richblack-5   ' > </div>
+                <div className=' w-[600px] h-[545px] gap-[98px] bg-richblack-5   ' > </div>
 
                 <div className='w-[616px] h-[545px] absolute left-10 -z-14 top-10 '>
-                        <img className=' object-contain ' src={teacher} alt="teacher" />
+                    <img className=' object-contain ' src={teacher} alt="teacher" />
                 </div>
 
                 <div className='w-[486px] gap-[12px] flex flex-col justify-center items-center'>
@@ -181,32 +181,41 @@ export default function Home() {
                     <div className='text-white  w-full justify-start flex h-[86px]  text-[36px] '>
 
                         <div className='w-[70%]'>
-                        Become an 
-                        <HighlightText text={"instructor"}/>
+                            Become an
+                            <HighlightText text={"instructor"} />
 
                         </div>
                     </div>
 
                     <div className='text-[16px] mt-6 font-bold text-richblack-400'>
-                    Instructors from around the world teach millions of students on StudyNotion. We provide the tools and skills to teach what you love.
+                        Instructors from around the world teach millions of students on StudyNotion. We provide the tools and skills to teach what you love.
                     </div>
 
                     <div className='w-full justify-start flex mt-10 '>
 
-                    <CTAbutton active={true} linkto={'/login'} >
-                        <div className='flex gap-2'>
-                            Start Learning Today 
-                            <FaArrowRight/>
-                        </div>
-                    </CTAbutton>
+                        <CTAbutton active={true} linkto={'/login'} >
+                            <div className='flex gap-2'>
+                                Start Learning Today
+                                <FaArrowRight />
+                            </div>
+                        </CTAbutton>
                     </div>
                 </div>
-
             </div>
 
+            {/* Reviws from Other Learner */}
+            
+            <div className='flex-col relative justify-between mx-auto w-11/12 max-w-maxContent p-5 mt-16 mb-72 '>
+            <h1 className="text-center text-4xl  text-richblack-5 font-semibold mt-8">
+                Reviews from other learners
+            </h1>
+                <div className=' w-full  flex justify-center items-center    ' > 
+                        <ReviewSlider />
+            </div>
+            </div>
 
             {/* Footer */}
-            <Footer/>
+            <Footer />
 
         </div>
     )

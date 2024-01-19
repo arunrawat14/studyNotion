@@ -214,7 +214,7 @@ exports.login = async (req, res) => {
         }
 
         // check user exits or not 
-        const user = await User.findOne({ email: email });
+        const user = await User.findOne({ email: email }).populate("additionalDetails");
 
         // check if not exists
         if (!user) {
@@ -241,7 +241,7 @@ exports.login = async (req, res) => {
 
             // sign the token 
             const token = jwt.sign(payload, process.env.JWT_SECRET, {
-                expiresIn: '2h'
+                expiresIn: '2d'
             })
 
             user.token = token.object

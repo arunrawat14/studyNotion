@@ -4,6 +4,7 @@ import { TiMessages } from "react-icons/ti";
 import { GiWorld } from "react-icons/gi";
 import { IoMdCall } from "react-icons/io";
 import Footer from '../components/common/Footer'
+import ReviewSlider from '../components/common/ReviewSlider'
 const ContactUs = () => {
     return (
         <div className='' >
@@ -65,8 +66,15 @@ const ContactUs = () => {
 
             </div>
 
-            <div className='mt-[120px] text-[36px] font-semibold flex justify-center text-richblack-5'>
-                Reviews From Other Learners
+            {/* Reviws from Other Learner */}
+            
+            <div className='flex-col relative justify-between mx-auto w-11/12 max-w-maxContent p-5 mt-16 mb-72 '>
+            <h1 className="text-center text-4xl  text-richblack-5 font-semibold mt-8">
+                Reviews from other learners
+            </h1>
+                <div className=' w-full  flex justify-center items-center    ' > 
+                        <ReviewSlider />
+            </div>
             </div>
 
             {/* Review section */}
